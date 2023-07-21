@@ -45,7 +45,7 @@ server.get('/api/v1/muebles/:codigo', async (req, res) => {
     } catch (error) {
         res.status(500).send({ message: 'Se ha generado un error en el servidor' });
     }
-}); 
+});
 
 // | POST | http://127.0.0.1:3005/api/v1/muebles | Crea un nuevo registro |
 server.post('/api/v1/muebles', async (req, res) => {
@@ -89,7 +89,7 @@ server.put('/api/v1/muebles/:codigo', async (req, res) => {
     } catch (error) {
         console.log(error.message);
         res.status(500).send({ message: 'Se ha generado un error en el servidor' });
-    } 
+    }
 });
 
 // | DELETE | http://127.0.0.1:3005/api/v1/muebles/1 | Elimina un registro en específico |
