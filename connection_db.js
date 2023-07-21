@@ -38,8 +38,8 @@ async function connectToCollection(collectionName) {
     return collection;
 }
 
-//Generar ID nuevo
-async function crearCodigo(collection) {   
+// Generar ID nuevo
+async function crearCodigo(collection) {
     const documentMaxCod = await collection.find().sort({ codigo: -1}).limit(1).toArray();
     const maxCod = documentMaxCod[0]?.codigo ?? 0;
 
