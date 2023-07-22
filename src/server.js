@@ -33,11 +33,12 @@ server.get('/api/v1/muebles', async (req, res) => {
     try {
         const collection = await connectToCollection('muebles');
         muebles = await collection.find(filtros).sort(orden).toArray();
-        await disconnect();
         res.status(200).send({ payload: muebles });
     } catch (error) {
         console.log(error.message);
         res.status(500).send({ message: 'Se ha generado un error en el servidor' });
+    } finally {
+        await disconnect();
     }
 });
 
@@ -48,11 +49,12 @@ server.get('/api/v1/muebles/:codigo', async (req, res) => {
     try {
         const collection = await connectToCollection('muebles');
         const mueble = await collection.findOne({ codigo: Number(codigo) });
-        await disconnect();
         if (mueble === null) return res.status(400).send({ message: 'El código no corresponde a un mueble registrado' });
         res.status(200).send({ payload: mueble });
     } catch (error) {
         res.status(500).send({ message: 'Se ha generado un error en el servidor' });
+    } finally {
+        await disconnect();
     }
 });
 
@@ -68,10 +70,11 @@ server.post('/api/v1/muebles', async (req, res) => {
         const collection = await connectToCollection('muebles');
         let doc = { codigo: await crearCodigo(collection), ...data};
         await collection.insertOne(doc);
-        await disconnect();
         res.status(201).send({ message: 'Registro creado', payload: doc });
     } catch (error) {
         res.status(500).send({ message: 'Se ha generado un error en el servidor' });
+    } finally {
+        await disconnect();
     }
 });
 
@@ -93,11 +96,12 @@ server.put('/api/v1/muebles/:codigo', async (req, res) => {
         mueble.categoria = categoria;
 
         await collection.updateOne({ codigo: Number(codigo) }, { $set: mueble });
-        await disconnect();
         res.status(200).send({ message: 'Registro actualizado', payload: { codigo, ...mueble } });
     } catch (error) {
         console.log(error.message);
         res.status(500).send({ message: 'Se ha generado un error en el servidor' });
+    } finally {
+        await disconnect();
     }
 });
 
@@ -112,12 +116,13 @@ server.delete('/api/v1/muebles/:codigo', async (req, res) => {
         if (!mueble) return res.status(400).send({ message: 'El código no corresponde a un mueble registrado' });
 
         await collection.deleteOne({ codigo: Number(codigo) });
-        await disconnect();
 
         res.status(200).send(JSON.stringify({ message: 'Registro eliminado' }));
     } catch (error) {
         console.log(error.message);
         res.status(500).send({ message: 'Se ha generado un error en el servidor' });
+    } finally {
+        await disconnect();
     }
 });
 
