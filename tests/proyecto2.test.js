@@ -55,10 +55,10 @@ async function testEnvDist() {
     let data = await readFile(path.join(__dirname, '../.env.dist'));
     data = data.length > 0 ? data.map((element) => element.split('=')) : [];
 
-    const SERVER_HOST = data.find((item) => item[0] === 'SERVER_HOST');
-    const SERVER_PORT = data.find((item) => item[0] === 'SERVER_PORT');
-    const DATABASE_URL = data.find((item) => item[0] === 'DATABASE_URL');
-    const DATABASE_NAME = data.find((item) => item[0] === 'DATABASE_NAME');
+    const SERVER_HOST = data.find((item) => item[0].trim() === 'SERVER_HOST');
+    const SERVER_PORT = data.find((item) => item[0].trim() === 'SERVER_PORT');
+    const DATABASE_URL = data.find((item) => item[0].trim() === 'DATABASE_URL');
+    const DATABASE_NAME = data.find((item) => item[0].trim() === 'DATABASE_NAME');
 
     isEqual({ subTitle: `La variable "SERVER_HOST" debe estar declarada`, result: SERVER_HOST !== undefined });
     isEqual({ subTitle: `El valor de "SERVER_HOST" debe ser "127.0.0.1"`, result: (SERVER_HOST && SERVER_HOST[1].trim() === '127.0.0.1') });
@@ -77,8 +77,8 @@ async function testGitIgnore() {
     const NODE_MODULES = data.find((item) => item.trim() === 'node_modules/');
     const ENV = data.find((item) => item.trim() === '.env');
 
-    isEqual({ subTitle: `El directorio "node_modules/" debe estar declarado`, result: NODE_MODULES === 'node_modules/' });
-    isEqual({ subTitle: `El archivo ".env" debe estar declarado`, result: (ENV === '.env') });
+    isEqual({ subTitle: `El directorio "node_modules/" debe estar declarado`, result: (NODE_MODULES && NODE_MODULES.trim() === 'node_modules/') });
+    isEqual({ subTitle: `El archivo ".env" debe estar declarado`, result: (ENV && ENV.trim() === '.env') });
 }
 
 async function testFileConnectionDB() {
